@@ -1,0 +1,37 @@
+        <style>
+        * {
+            text-align: center;
+        }
+          body {
+            background-color: lightblue;
+          }
+          h1 {
+            color: navy;
+          }
+          table, th, td {
+  border: 1px solid;
+  }
+  table {
+  margin-left: auto;
+  margin-right: auto;
+}
+        </style>
+
+<h1>Members</h1>
+<table>
+    <tr>
+        <td>Username</td>
+        <td>Email</td>
+        <td>Actions</td>
+    </tr>
+    {% for user in authors %}
+        <tr>
+            <th>{{ user.username|e }}</th>
+            <th>{{ user.email|e }}</th>
+            <th>
+                <button style="background-color: blue; color: white; padding: 10px 20px; border-radius: 5px;">Edit</button>
+                <button style="background-color: blue; color: white; padding: 10px 20px; border-radius: 5px;">Delete</button>
+            </th>
+        </tr>
+    {% endfor %}
+</table>

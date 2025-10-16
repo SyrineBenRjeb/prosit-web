@@ -24,7 +24,7 @@
         <td>Email</td>
         <td>Actions</td>
     </tr>
-    {% for user in authors %}
+    {% for user in list %}
         <tr>
             <th>{{ user.username|e }}</th>
             <th>{{ user.email|e }}</th>

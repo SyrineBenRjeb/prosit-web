@@ -29,6 +29,9 @@ class Book
     #[ORM\ManyToOne(inversedBy: 'books')]
     private ?Author $author = null;
 
+    #[ORM\Column(length: 255, nullable: true)] // ✅ Ajout explicite nullable
+    private ?string $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -42,7 +45,6 @@ class Book
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -54,7 +56,6 @@ class Book
     public function setPublicationDate(\DateTime $publicationDate): static
     {
         $this->publicationDate = $publicationDate;
-
         return $this;
     }
 
@@ -66,7 +67,6 @@ class Book
     public function setEnabled(bool $enabled): static
     {
         $this->enabled = $enabled;
-
         return $this;
     }
 
@@ -78,7 +78,6 @@ class Book
     public function setPublished(bool $published): static
     {
         $this->published = $published;
-
         return $this;
     }
 
@@ -90,7 +89,17 @@ class Book
     public function setAuthor(?Author $author): static
     {
         $this->author = $author;
+        return $this;
+    }
 
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?string $category): static
+    {
+        $this->category = $category;
         return $this;
     }
 }

@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des livres{% endblock %}
+
+{% block body %}
+<h1>Liste des livres</h1>
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+<h3>Nombre de livres publiés : {{ publishedCount }}</h3>
+<h3>Nombre de livres non publiés : {{ unpublishedCount }}</h3>
+
+{% if booksPublished is empty and booksUnpublished is empty %}
+    <p>No Books found</p>
+{% else %}
+
+<h4>Livres publiés</h4>
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Modifier</th>
+            <th>Supprimer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in booksPublished %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author ? book.author.username : 'Auteur inconnu' }}</td>
+                <td>
+                    <a href="{{ path('book_edit', {'id': book.id}) }}">Edit</a>
+                </td>
+                <td>
+                    <a href="{{ path('book_delete', {'id': book.id}) }}" 
+                       onclick="return confirm('Voulez-vous vraiment supprimer ce livre ?');">Delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun livre publié trouvé.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<h4>Livres non publiés</h4>
+<<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Modifier</th>
+            <th>Supprimer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in booksUnpublished %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author ? book.author.username : 'Auteur inconnu' }}</td>
+                <td>
+                    <a href="{{ path('book_edit', {'id': book.id}) }}">Edit</a>
+                </td>
+                <td>
+                    <a href="{{ path('book_delete', {'id': book.id}) }}" 
+                       onclick="return confirm('Voulez-vous vraiment supprimer ce livre ?');">Delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun livre non publié trouvé.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endif %}
+
+<a href="{{ path('addBook') }}" class="btn btn-primary mt-3">Ajouter un nouveau livre</a>
+<a href="{{ path('author_delete_empty') }}" class="btn btn-danger mt-3"
+   onclick="return confirm('Voulez-vous vraiment supprimer tous les auteurs sans livre ?');">Supprimer auteurs sans livre</a>
+{% endblock %}
+

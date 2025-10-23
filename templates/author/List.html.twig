@@ -1,0 +1,22 @@
+<h1>Recherche d'auteurs</h1>
+
+{{ form_start(form) }}
+    {{ form_row(form.minBooks) }}
+    {{ form_row(form.maxBooks) }}
+    {{ form_row(form.search) }}
+{{ form_end(form) }}
+
+<h2>Liste des auteurs</h2>
+
+{# Affichage de la citation positive #}
+{% if quote is defined %}
+    <p style="font-style: italic; color: green;">💡 Citation du jour : {{ quote }}</p>
+{% endif %}
+
+<ul>
+    {% for author in authors %}
+        <li>{{ author.username }} - {{ author.nbBooks }} livres</li>
+    {% else %}
+        <li>Aucun auteur trouvé</li>
+    {% endfor %}
+</ul>

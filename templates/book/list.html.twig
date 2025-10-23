@@ -3,87 +3,160 @@
 {% block title %}Liste des livres{% endblock %}
 
 {% block body %}
-<h1>Liste des livres</h1>
+<h1 style="text-align:center; color:#2c3e50;">Liste des livres</h1>
 
+{# Flash messages success #}
 {% for message in app.flashes('success') %}
-    <div class="alert alert-success">{{ message }}</div>
+    <div style="background-color:#d4edda; color:#155724; padding:10px; border-radius:5px; width:60%; margin:10px auto; text-align:center;">
+        {{ message }}
+    </div>
 {% endfor %}
 
-<h3>Nombre de livres publiés : {{ publishedCount }}</h3>
-<h3>Nombre de livres non publiés : {{ unpublishedCount }}</h3>
+{# ============= SEARCH FORM ============= #}
+<div style="text-align:center; margin:20px auto; padding:15px; background-color:#f8f9fa; border-radius:5px; width:60%;">
+    <form action="{{ path('book_search') }}" method="get" id="searchForm">
+        <label for="ref" style="font-weight:bold;">Ref:</label>
+        <input
+            type="text"
+            id="ref"
+            name="ref"
+            value="{{ searchRef|default('') }}"
+            placeholder="Entrez une référence..."
+            style="padding:5px 10px; border:1px solid #ccc; border-radius:3px; width:200px;"
+        >
+        <button
+            type="submit"
+            style="background-color:#3498db; color:white; padding:6px 20px; border:none; border-radius:3px; cursor:pointer;"
+        >
+            Search
+        </button>
+        {% if searchRef is defined and searchRef %}
+            <a
+                href="{{ path('book_list') }}"
+                style="background-color:#95a5a6; color:white; padding:6px 15px; border-radius:3px; text-decoration:none; margin-left:10px;"
+            >
+                Réinitialiser
+            </a>
+        {% endif %}
+    </form>
+</div>
+
+{# Afficher le résultat de recherche #}
+{% if searchRef is defined and searchRef %}
+    <div style="background-color:#d1ecf1; color:#0c5460; padding:10px; text-align:center; border-radius:5px; width:60%; margin:10px auto;">
+        Résultats pour : <strong>"{{ searchRef }}"</strong>
+    </div>
+{% endif %}
+
+<div style="text-align:center; margin-top:15px;">
+    <h3>Nombre de livres publiés : {{ publishedCount }}</h3>
+    <h3>Nombre de livres non publiés : {{ unpublishedCount }}</h3>
+</div>
 
 {% if booksPublished is empty and booksUnpublished is empty %}
-    <p>No Books found</p>
+    <p style="text-align:center; color:gray; margin-top:20px;">
+        {% if searchRef is defined and searchRef %}
+            Aucun livre trouvé pour la référence "{{ searchRef }}".
+        {% else %}
+            Aucun livre trouvé.
+        {% endif %}
+    </p>
 {% else %}
 
-<h4>Livres publiés</h4>
-<table border="1" cellpadding="5" cellspacing="0">
-    <thead>
-        <tr>
-            <th>Titre</th>
-            <th>Auteur</th>
-            <th>Modifier</th>
-            <th>Supprimer</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for book in booksPublished %}
+    {# ============= LIVRES PUBLIÉS ============= #}
+    <h2 style="margin-top:30px; color:green;">Livres publiés</h2>
+    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse:collapse; margin-bottom:30px;">
+        <thead style="background-color:#e8f5e9;">
             <tr>
-                <td>{{ book.title }}</td>
-                <td>{{ book.author ? book.author.username : 'Auteur inconnu' }}</td>
-                <td>
-                    <a href="{{ path('book_edit', {'id': book.id}) }}">Edit</a>
-                </td>
-                <td>
-                    <a href="{{ path('book_delete', {'id': book.id}) }}" 
-                       onclick="return confirm('Voulez-vous vraiment supprimer ce livre ?');">Delete</a>
-                </td>
+                <th>Ref</th>
+                <th>Titre</th>
+                <th>Date de publication</th>
+                <th>Publié</th>
+                <th>Catégorie</th>
+                <th>Auteur</th>
+                <th>Actions</th>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">Aucun livre publié trouvé.</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for book in booksPublished %}
+                <tr>
+                    <td>{{ book.ref }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.publicationDate ? book.publicationDate|date('d M Y') : '' }}</td>
+                    <td>{{ book.published ? 'Oui' : 'Non' }}</td>
+                    <td>{{ book.category }}</td>
+                    <td>{{ book.author ? book.author.username : 'Auteur inconnu' }}</td>
+                    <td>
+                        <a href="{{ path('book_show', {'id': book.id}) }}">Voir</a> |
+                        <a href="{{ path('book_edit', {'id': book.id}) }}">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" style="text-align:center;">Aucun livre publié trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-
-<h4>Livres non publiés</h4>
-<<table border="1" cellpadding="5" cellspacing="0">
-    <thead>
-        <tr>
-            <th>Titre</th>
-            <th>Auteur</th>
-            <th>Modifier</th>
-            <th>Supprimer</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for book in booksUnpublished %}
+    {# ============= LIVRES NON PUBLIÉS ============= #}
+    <h2 style="color:#555;">Livres non publiés</h2>
+    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse:collapse;">
+        <thead style="background-color:#f0f0f0;">
             <tr>
-                <td>{{ book.title }}</td>
-                <td>{{ book.author ? book.author.username : 'Auteur inconnu' }}</td>
-                <td>
-                    <a href="{{ path('book_edit', {'id': book.id}) }}">Edit</a>
-                </td>
-                <td>
-                    <a href="{{ path('book_delete', {'id': book.id}) }}" 
-                       onclick="return confirm('Voulez-vous vraiment supprimer ce livre ?');">Delete</a>
-                </td>
+                <th>Ref</th>
+                <th>Titre</th>
+                <th>Date de publication</th>
+                <th>Publié</th>
+                <th>Catégorie</th>
+                <th>Auteur</th>
+                <th>Actions</th>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">Aucun livre non publié trouvé.</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+        </thead>
+        <tbody>
+            {% for book in booksUnpublished %}
+                <tr>
+                    <td>{{ book.ref }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.publicationDate ? book.publicationDate|date('d M Y') : '' }}</td>
+                    <td>{{ book.published ? 'Oui' : 'Non' }}</td>
+                    <td>{{ book.category }}</td>
+                    <td>{{ book.author ? book.author.username : 'Auteur inconnu' }}</td>
+                    <td>
+                        <a href="{{ path('book_show', {'id': book.id}) }}">Voir</a> |
+                        <a href="{{ path('book_edit', {'id': book.id}) }}">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" style="text-align:center;">Aucun livre non publié trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endif %}
 
-<a href="{{ path('addBook') }}" class="btn btn-primary mt-3">Ajouter un nouveau livre</a>
-<a href="{{ path('author_delete_empty') }}" class="btn btn-danger mt-3"
-   onclick="return confirm('Voulez-vous vraiment supprimer tous les auteurs sans livre ?');">Supprimer auteurs sans livre</a>
-{% endblock %}
+{# ============= BOUTONS D'ACTION ============= #}
+<div style="margin-top:20px; display:flex; justify-content:space-between; width:60%; margin-left:auto; margin-right:auto;">
+    <a href="{{ path('addBook') }}" style="background-color:#3498db; color:white; padding:10px 15px; border-radius:5px; text-decoration:none;">
+        Ajouter un nouveau livre
+    </a>
 
+    <a href="{{ path('author_delete_empty') }}"
+       onclick="return confirm('Voulez-vous vraiment supprimer tous les auteurs sans livre ?');"
+       style="background-color:#e74c3c; color:white; padding:10px 15px; border-radius:5px; text-decoration:none;">
+       Supprimer auteurs sans livre
+    </a>
+</div>
+
+<div style="text-align:center; margin-top:15px;">
+    <a href="{{ path('book_update_category') }}"
+       class="btn btn-warning"
+       onclick="return confirm('Êtes-vous sûr de vouloir changer tous les livres Science-Fiction en Romance ?')"
+       style="background-color:#f39c12; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; display:inline-block;">
+        Convertir Science-Fiction → Romance
+    </a>
+</div>
+
+{% endblock %}

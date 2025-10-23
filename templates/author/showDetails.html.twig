@@ -1,3 +1,32 @@
-<h1>Détails d'un auteur dont l'ID est {{author.id}}</h1>
-{{author.username}}
-{{author.email}}
+{% extends 'base.html.twig' %}
+
+{% block title %}Auteur #{{ author.id }}{% endblock %}
+
+{% block body %}
+  <h1>Détails d'un auteur dont l'ID est {{ author.id }}</h1>
+
+  <ul>
+    <li><strong>Username :</strong> {{ author.username }}</li>
+    <li><strong>Email :</strong> {{ author.email }}</li>
+  </ul>
+
+  <p>
+    <a href="{{ path('ShowAll') }}">← Retour à la liste</a>
+  </p>
+{% endblock %}
+
+update.html.twig
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un auteur{% endblock %}
+
+{% block body %}
+    <h1>Modifier l'auteur : {{ author.username }}</h1>
+
+    {{ form_start(formulaire) }}
+        {{ form_widget(formulaire) }}
+    {{ form_end(formulaire) }}
+
+    <a href="{{ path('ShowAll') }}">Retour à la liste</a>
+{% endblock %}

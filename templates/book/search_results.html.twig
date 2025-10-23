@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats de recherche{% endblock %}
+
+{% block body %}
+    <h1>Résultats de recherche pour "{{ searchRef }}"</h1>
+
+    {% if books is empty %}
+        <p>Aucun livre trouvé.</p>
+    {% else %}
+        <ul>
+            {% for book in books %}
+                <li>
+                    <a href="{{ path('book_show', {'id': book.id}) }}">
+                        {{ book.title }} 
+                    </a>
+                    {% if book.author %}
+                        par {{ book.author.username }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{{ path('book_list') }}">Retour à la liste des livres</a>
+{% endblock %}

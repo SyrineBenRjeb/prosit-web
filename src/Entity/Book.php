@@ -14,6 +14,10 @@ class Book
     #[ORM\Column]
     private ?int $id = null;
 
+    // AJOUT DE LA PROPRIÉTÉ REF
+    #[ORM\Column(length: 255)]
+    private ?string $ref = null;
+
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
@@ -29,12 +33,25 @@ class Book
     #[ORM\ManyToOne(inversedBy: 'books')]
     private ?Author $author = null;
 
-    #[ORM\Column(length: 255, nullable: true)] // ✅ Ajout explicite nullable
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $category = null;
+
+    // -- GETTERS & SETTERS --
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getRef(): ?string
+    {
+        return $this->ref;
+    }
+
+    public function setRef(string $ref): static
+    {
+        $this->ref = $ref;
+        return $this;
     }
 
     public function getTitle(): ?string

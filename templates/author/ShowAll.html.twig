@@ -1,37 +1,63 @@
-        <style>
-        * {
-            text-align: center;
-        }
-          body {
-            background-color: lightblue;
-          }
-          h1 {
-            color: navy;
-          }
-          table, th, td {
-  border: 1px solid;
-  }
-  table {
-  margin-left: auto;
-  margin-right: auto;
-}
-        </style>
+{% extends 'base.html.twig' %}
 
-<h1>Members</h1>
-<table>
-    <tr>
-        <td>Username</td>
-        <td>Email</td>
-        <td>Actions</td>
-    </tr>
-    {% for user in list %}
+{% block title %}Liste des auteurs{% endblock %}
+
+{% block body %}
+  <h2 style="text-align:center;">Liste des auteurs</h2>
+
+  {# 💬 Message positif généré par le service HappyQuote #}
+  <div style="
+      background-color:#d9f9d9;
+      border:1px solid #a2dca2;
+      color:#2f6d2f;
+      text-align:center;
+      padding:10px;
+      border-radius:8px;
+      width:60%;
+      margin:15px auto;
+      font-style:italic;
+  ">
+      💬 {{ happyMessage }}
+  </div>
+
+  <p style="text-align:center;">
+    <a href="{{ path('addStat') }}">➕ Ajouter un auteur test</a> |
+    <a href="{{ path('addForm') }}"> Ajouter via formulaire</a>
+  </p>
+
+  <table border="1" cellspacing="0" cellpadding="8" align="center">
+    <thead style="background-color:#f2f2f2;">
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in list %}
         <tr>
-            <th>{{ user.username|e }}</th>
-            <th>{{ user.email|e }}</th>
-            <th>
-                <button style="background-color: blue; color: white; padding: 10px 20px; border-radius: 5px;">Edit</button>
-                <button style="background-color: blue; color: white; padding: 10px 20px; border-radius: 5px;">Delete</button>
-            </th>
+          <td>{{ i.id }}</td>
+          <td>{{ i.username }}</td>
+          <td>{{ i.email }}</td>
+          <td>
+            <a href="{{ path('showAuthorDetails', {'id': i.id}) }}"> Voir</a> |
+            <a href="{{ path('updateAuthor', {'id': i.id}) }}"> Modifier</a> |
+            <a href="{{ path('deleteAuthor', {'id': i.id}) }}"
+               onclick="return confirm('Supprimer {{ i.username }} ?');">Supprimer</a>
+          </td>
         </tr>
-    {% endfor %}
-</table>
+      {% else %}
+        <tr>
+          <td colspan="4" style="text-align:center;">Aucun auteur trouvé</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p style="text-align:center; margin-top:20px;">
+    <a href="{{ path('addStat') }}">➕ Ajouter un auteur test</a> |
+    <a href="{{ path('addForm') }}">Ajouter via formulaire</a> |
+    <a href="{{ path('ShowAllByEmail') }}">🔤 Trier par Email</a>
+  </p>
+{% endblock %}

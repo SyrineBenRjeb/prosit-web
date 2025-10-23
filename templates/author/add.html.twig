@@ -1,13 +1,25 @@
-{#{{form(formulaire )}} #}
+{% extends 'base.html.twig' %}
 
-{{form_start(formulaire)}} {#<form>#}
-{{form_label(formulaire.username,'Votre nom')}} {# <label>#}
-{{form_widget(formulaire.username)}} {#<input>#}
-{{form_errors(formulaire.username)}}
+{% block title %}Ajouter un auteur{% endblock %}
 
-{#{{form_row(formulaire.username)}}#}
-{{form_label(formulaire.email)}} {# <label>#}
-{{form_widget(formulaire.email)}} {#<input>#}
-{{form_errors(formulaire.email)}}
+{% block body %}
+    <h2 style="text-align: center;">Ajouter un auteur</h2>
 
-{{form_end(formulaire)}} {#</form>#}
+    <div style="width: 50%; margin: auto;">
+        {{ form_start(formulaire) }}
+            {{ form_label(formulaire.username, 'Votre nom') }}
+            {{ form_widget(formulaire.username) }}
+            {{ form_errors(formulaire.username) }}
+
+            <br>
+
+            {{ form_label(formulaire.email, 'Votre email') }}
+            {{ form_widget(formulaire.email) }}
+            {{ form_errors(formulaire.email) }}
+
+            <br>
+
+            <button type="submit" class="btn btn-primary">✅ Enregistrer</button>
+        {{ form_end(formulaire) }}
+    </div>
+{% endblock %}

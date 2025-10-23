@@ -1,5 +1,19 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
+{% extends 'base.html.twig' %}
 
-        <button type ="submit">update</button>
-{{ form_end(form) }}
+{% block title %}Modifier un auteur{% endblock %}
+
+{% block body %}
+<h2 style="text-align:center;">Modifier l'auteur</h2>
+
+<div style="width:50%; margin:auto;">
+    {{ form_start(formulaire) }}
+        {{ form_widget(formulaire) }}
+        <br>
+        <button type="submit">✅ Mettre à jour</button>
+    {{ form_end(formulaire) }}
+</div>
+
+<p style="text-align:center;">
+    <a href="{{ path('ShowAll') }}">⬅️ Retour à la liste des auteurs</a>
+</p>
+{% endblock %}
